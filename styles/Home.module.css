@@ -10,6 +10,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
 }
 
 .footer {
@@ -42,7 +43,8 @@
 .title {
   margin: 0;
   line-height: 1.15;
-  font-size: 4rem;
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .title,
@@ -82,7 +84,8 @@
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 300px;
+  width: 70%;
+  min-height: 50vh;
 }
 
 .card:hover,
@@ -113,4 +116,7 @@
     width: 100%;
     flex-direction: column;
   }
+}
+.strike {
+  text-decoration: line-through;
 }
