@@ -6,15 +6,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { IoSearchCircle } from "react-icons/io5";
 import {IconContext} from "react-icons";
 import {IoArrowDownCircle} from "react-icons/io5";
+import {IoGiftSharp} from "react-icons/io5";
 
-const InputCom = ({ addItem,searchItem }) => {
+const InputCom = ({ addItem,searchItem,drawItem }) => {
     const [wish, setWish] = useState({
         id: "",
         title: "",
-        time: ""
+        time: "",
+        complete:false
+        
     })
     
-
     const today = new Date()
     let date = today.getDate()
     let month = today.getMonth() + 1
@@ -35,11 +37,16 @@ const InputCom = ({ addItem,searchItem }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         addItem(wish);
-        setWish("");
+        setWish({...wish, title:""});
     }
     const handleSearch = (e) => {
         e.preventDefault();
-        searchItem(wish);
+        searchItem(wish.title);
+       
+    }
+    const handleDraw = (e) => {
+        e.preventDefault();
+       drawItem();
        
     }
 
@@ -49,12 +56,17 @@ const InputCom = ({ addItem,searchItem }) => {
                 placeholder="input a wish"
                 aria-label="input a wish"
                 aria-describedby="basic-addon2"
-                onChange={e => setWish({ ...wish, id: uuidv4(), title: e.target.value, time:time, complete: false })}
-               
+                onChange={e => setWish({ ...wish, id: uuidv4(), title: e.target.value, time:time, complete: false})}
+               value={wish.title}
             />
             <Button variant="outline-secondary" id="button-addon2" onClick={handleSearch}>
             <IconContext.Provider value={{ style: { fontSize:"2rem"} }}>
             <IoSearchCircle />
+            </IconContext.Provider>
+            </Button>
+            <Button variant="outline-secondary" id="button-addon2" onClick={handleDraw}>
+            <IconContext.Provider value={{ style: { fontSize:"1.75rem"} }}>
+            <IoGiftSharp/>
             </IconContext.Provider>
             </Button>
             <Button variant="outline-secondary" id="button-addon2" onClick={handleSubmit}>

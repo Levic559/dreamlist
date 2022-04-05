@@ -7,9 +7,9 @@ const ItemList = ({wishlist, handleToggle, handleFilter}) => {
     return (
         <div>
             <div style={{paddingRight: "1rem",paddingLeft: "1rem", border:"1px"  }}>
-            {wishlist.map(o => {
+            {wishlist.map( (o,i) => {
                 return (
-                    <NewItem NewItem={o} handleToggle={handleToggle} handleFilter={handleFilter} />
+                    <NewItem key={i} NewItem={o} handleToggle={handleToggle} handleFilter={handleFilter} />
                     )
                 })}
                 </div>

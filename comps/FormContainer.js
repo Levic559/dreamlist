@@ -1,33 +1,62 @@
 import React, { useState, useEffect } from "react";
-import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Stack from 'react-bootstrap/Stack'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import InputCom from "./InputCom";
 import ItemList from "./ItemList";
 import styles from '../styles/Home.module.css'
-
-const FormContainer = () => {
-
-
+import axios from'axios'
+import wishlists from "../utils/data/wishlists.json";
+const FormContainer = ({
+  
+}) => {
 
 
   const [wishlist, setWishlist] = useState([])
+  const [searchlist,setSearchlist]=useState([])
 
+  useEffect(()=>{
 
+    const loadItems =async () => {
+      console.log("async load");
+      const {data} = await axios.get("/api/wishlist")
+      setWishlist(data);
+    }
+loadItems()
+  },[])
+  Array.prototype.random = function () {
+    return this[Math.floor((Math.random()*this.length))];
+  }
+  
+  const getRandomItem=()=>{
+    let drawItem= wishlist.random()
+    // console.log(drawItem.id)
+    let mapped = wishlist.map(item => {
+     
+      return  item.id === drawItem.id ? { ...item, complete: !item.complete } : { ...item};
+    });
+    setWishlist(mapped);
+
+  }
 
   const addItem = (wish) => {
     var wishes = wishlist.concat([wish])
     setWishlist(wishes)
   }
-  const searchItem = (wish) => {
-    let filtered =wishlist.filter.includes()
+  const searchItem =async (txt) => {
+    console.log(txt);
+    console.log("async search");
+    const res = await axios.get("/api/search", {
+      params:{
+        txt:txt
+      }
+    })
+    console.log(res.data);
+    setWishlist(res.data);
   }
+    
 
   const handleFilter = () => {
     let filtered = wishlist.filter(NewItem => {
@@ -41,26 +70,35 @@ const FormContainer = () => {
       return item.id === id ? { ...item, complete: !item.complete } : { ...item};
     });
     setWishlist(mapped);
-    console.log(mapped)
+    // console.log(mapped)
+  }
+  const saveMyWishList= async()=>{
+    const res =await axios.post("/api/wishlist",{
+     wishlist:wishlist
+    })
+
+    // console.log(wishlist)
+    console.log(res.data)
+    
   }
 
-  console.log(wishlist)
   return <Container className={styles.card} >
     <Row className="justify-content-md-center mb-5">
-      <Col  lg="8" className="justify-content-md-center">
-        <InputCom addItem={addItem}  searchItem={searchItem}/>
+      <Col  lg="10" className="justify-content-md-center">
+        <InputCom addItem={addItem}  searchItem={searchItem} drawItem={getRandomItem}/>
       </Col>
     </Row>
     <Row className="justify-content-md-center"  >
-      <Col  lg="8" className="justify-content-md-center">
+      <Col  lg="10" className="justify-content-md-center">
       <ItemList wishlist={wishlist} handleToggle={handleToggle} handleFilter={handleFilter}/>
       </Col>
      
     </Row>
     <Row className="justify-content-md-center"  >
-      <Col  lg="8" className="justify-content-md-center">
+      <Col  lg="10" className="justify-content-md-center">
       
     <Button style={{margin: '20px'}} onClick={handleFilter}>Delete</Button>
+    <Button style={{margin: '20px'}} onClick={saveMyWishList}>Save</Button>
       </Col>
      
     </Row>
