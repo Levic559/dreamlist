@@ -2,7 +2,7 @@
 import { filtering } from '../../utils/func.js';
 import wishlists from '../../utils/data/wishlists.json';
 import { Save, Read } from "../../utils/helpers"
-
+import axios from 'axios';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { wishlist } = req.body;
@@ -15,6 +15,9 @@ export default async function handler(req, res) {
    
     try{
 
+      // const json =await import('../../utils/data/wishlists.json')
+      // // console.log(json)
+      // res.status(200).json(json.default)
       const json =await import('../../utils/data/wishlists.json')
       // console.log(json)
       res.status(200).json(json.default)

@@ -21,7 +21,7 @@ const FormContainer = ({
 
     const loadItems =async () => {
       console.log("async load");
-      const {data} = await axios.get("/api/wishlist")
+      const {data} = await axios.get("http://localhost:3750/list")
       setWishlist(data);
     }
 loadItems()
@@ -41,9 +41,12 @@ loadItems()
 
   }
 
-  const addItem = (wish) => {
-    var wishes = wishlist.concat([wish])
-    setWishlist(wishes)
+  const addItem = async(wish) => {
+    // var wishes = wishlist.concat([wish])
+    // setWishlist(wishes)
+    const res = await axios.post("http://localhost:3750/list/addlist",wish)
+     console.log(res.data)
+
   }
   const searchItem =async (txt) => {
     console.log(txt);
@@ -65,22 +68,29 @@ loadItems()
     setWishlist(filtered);
   }
 
-  const handleToggle = (id) => {
+  const handleToggle = (_id) => {
+    console.log(_id)
+   
+  
     let mapped = wishlist.map(item => {
-      return item.id === id ? { ...item, complete: !item.complete } : { ...item};
+      return item._id === _id ? { ...item, complete: !item.complete } : { ...item};
+      
     });
     setWishlist(mapped);
     // console.log(mapped)
   }
   const saveMyWishList= async()=>{
-    const res =await axios.post("/api/wishlist",{
-     wishlist:wishlist
-    })
+    // const res =await axios.post("/api/wishlist",{
+    //  wishlist:wishlist
+    // })
+
+    await wishlist.save()
 
     // console.log(wishlist)
-    console.log(res.data)
+    // console.log(res.data)
     
   }
+  // console.log(wishlist)
 
   return <Container className={styles.card} >
     <Row className="justify-content-md-center mb-5">

@@ -10,7 +10,7 @@ import {IoGiftSharp} from "react-icons/io5";
 
 const InputCom = ({ addItem,searchItem,drawItem }) => {
     const [wish, setWish] = useState({
-        id: "",
+        _id: "",
         title: "",
         time: "",
         complete:false
@@ -56,7 +56,7 @@ const InputCom = ({ addItem,searchItem,drawItem }) => {
                 placeholder="input a wish"
                 aria-label="input a wish"
                 aria-describedby="basic-addon2"
-                onChange={e => setWish({ ...wish, id: uuidv4(), title: e.target.value, time:time, complete: false})}
+                onChange={e => setWish({ ...wish, _id: uuidv4(), title: e.target.value, time:time, complete: false})}
                value={wish.title}
             />
             <Button variant="outline-secondary" id="button-addon2" onClick={handleSearch}>

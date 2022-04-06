@@ -17,9 +17,9 @@ const NewItem = ({ NewItem, handleToggle }) => {
 
     <Row md="4" lg="6"
       className={
-        (NewItem.complete ? "bg-light text-dark mb-3" : " bg-warning border  mb-3")}
+        (NewItem.complete==true ? "bg-light text-dark mb-3" : " bg-warning border  mb-3")}
 
-      key={NewItem.id + NewItem.title} id={NewItem.id} value={NewItem.id} onClick={handleClick}
+      key={NewItem._id + NewItem.title} id={NewItem._id} value={NewItem._id} onClick={handleClick}
     >
       <Col md="9" lg="9" style={{ textAlign: "center" }} >
         {NewItem.title}
