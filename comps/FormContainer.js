@@ -16,7 +16,7 @@ const FormContainer = ({
 
 
   const [wishlist, setWishlist] = useState([])
-  const [donelist, setDownlist] = useState([])
+  const [donelist, setDonelist] = useState([])
   const [click, setClick] = useState([])
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const FormContainer = ({
 
     click.push(_id)
     let newclick = [...new Set(click)];
-    setDownlist(newclick);
+    setDonelist(newclick);
 
   }
 
