@@ -7,110 +7,123 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import InputCom from "./InputCom";
 import ItemList from "./ItemList";
 import styles from '../styles/Home.module.css'
-import axios from'axios'
+import axios from 'axios'
 import wishlists from "../utils/data/wishlists.json";
+import { deleteList } from "../utils/data/listHandler";
 const FormContainer = ({
-  
+
 }) => {
 
 
   const [wishlist, setWishlist] = useState([])
-  const [searchlist,setSearchlist]=useState([])
+  const [donelist, setDownlist] = useState([])
+  const [click, setClick] = useState([])
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    const loadItems =async () => {
+    const loadItems = async () => {
       console.log("async load");
-      const {data} = await axios.get("http://localhost:3750/list")
+      const { data } = await axios.get("http://localhost:3750/list")
       setWishlist(data);
     }
-loadItems()
-  },[])
+    loadItems()
+  }, [])
   Array.prototype.random = function () {
-    return this[Math.floor((Math.random()*this.length))];
+    return this[Math.floor((Math.random() * this.length))];
   }
-  
-  const getRandomItem=()=>{
-    let drawItem= wishlist.random()
+
+  const getRandomItem = () => {
+    let drawItem = wishlist.random()
     // console.log(drawItem.id)
     let mapped = wishlist.map(item => {
-     
-      return  item.id === drawItem.id ? { ...item, complete: !item.complete } : { ...item};
+
+      return item.id === drawItem.id ? { ...item, complete: !item.complete } : { ...item };
     });
     setWishlist(mapped);
 
   }
 
-  const addItem = async(wish) => {
+  const addItem = async (wish) => {
     // var wishes = wishlist.concat([wish])
     // setWishlist(wishes)
-    const res = await axios.post("http://localhost:3750/list/addlist",wish)
-     console.log(res.data)
+    const res = await axios.post("http://localhost:3750/list/addlist", wish)
+    console.log(res.data)
 
   }
-  const searchItem =async (txt) => {
+  const searchItem = async (txt) => {
     console.log(txt);
     console.log("async search");
     const res = await axios.get("/api/search", {
-      params:{
-        txt:txt
+      params: {
+        txt: txt
       }
     })
     console.log(res.data);
     setWishlist(res.data);
   }
-    
 
-  const handleFilter = () => {
-    let filtered = wishlist.filter(NewItem => {
-      return !NewItem.complete;
-    });
-    setWishlist(filtered);
-  }
+
+
+
 
   const handleToggle = (_id) => {
     console.log(_id)
-   
-  
     let mapped = wishlist.map(item => {
-      return item._id === _id ? { ...item, complete: !item.complete } : { ...item};
-      
+      return item._id === _id ? { ...item, complete: !item.complete } : { ...item };
     });
     setWishlist(mapped);
-    // console.log(mapped)
+
+    click.push(_id)
+    let newclick = [...new Set(click)];
+    setDownlist(newclick);
+
   }
-  const saveMyWishList= async()=>{
+
+  
+  console.log("donelist",donelist)
+
+  const handleFilter = async () => {
+    location.reload();
+    // let filtered = wishlist.filter(NewItem => {
+    //   return !NewItem.complete;
+    // })
+    // setWishlist(filtered);
+
+    console.log(donelist)
+      const deletelist = await deleteList(donelist)
+
+  }
+
+  const saveMyWishList = async (wishlist) => {
     // const res =await axios.post("/api/wishlist",{
     //  wishlist:wishlist
     // })
+    const res = await axios.put("http://localhost:3750/list/updatelist", wishlist)
 
-    await wishlist.save()
+    console.log(res.data)
 
-    // console.log(wishlist)
-    // console.log(res.data)
-    
   }
   // console.log(wishlist)
 
   return <Container className={styles.card} >
     <Row className="justify-content-md-center mb-5">
-      <Col  lg="10" className="justify-content-md-center">
-        <InputCom addItem={addItem}  searchItem={searchItem} drawItem={getRandomItem}/>
+      <Col lg="10" className="justify-content-md-center">
+        <InputCom addItem={addItem} searchItem={searchItem} drawItem={getRandomItem} />
       </Col>
     </Row>
     <Row className="justify-content-md-center"  >
-      <Col  lg="10" className="justify-content-md-center">
-      <ItemList wishlist={wishlist} handleToggle={handleToggle} handleFilter={handleFilter}/>
+      <Col lg="10" className="justify-content-md-center">
+        <ItemList wishlist={wishlist} handleToggle={handleToggle} handleFilter={handleFilter} />
       </Col>
-     
+
     </Row>
     <Row className="justify-content-md-center"  >
-      <Col  lg="10" className="justify-content-md-center">
-      
-    <Button style={{margin: '20px'}} onClick={handleFilter}>Delete</Button>
-    <Button style={{margin: '20px'}} onClick={saveMyWishList}>Save</Button>
+      <Col lg="10" className="justify-content-md-center">
+
+        <Button style={{ margin: '20px' }} onClick={handleFilter}>Delete</Button>
+        <Button style={{ margin: '20px' }} onClick={saveMyWishList}>Save</Button>
       </Col>
-     
+
     </Row>
 
 

@@ -13,7 +13,7 @@ const InputCom = ({ addItem,searchItem,drawItem }) => {
         _id: "",
         title: "",
         time: "",
-        complete:false
+        complete:""
         
     })
     
@@ -34,8 +34,8 @@ const InputCom = ({ addItem,searchItem,drawItem }) => {
     }
 
   let time= date+"  "+month+"  "+year
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+        location.reload();
         addItem(wish);
         setWish({...wish, title:""});
     }
