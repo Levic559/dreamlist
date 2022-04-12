@@ -8,8 +8,7 @@ import InputCom from "./InputCom";
 import ItemList from "./ItemList";
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
-import wishlists from "../utils/data/wishlists.json";
-import { deleteList } from "../utils/data/listHandler";
+import { deleteList,addList,getList} from "../utils/data/listHandler";
 const FormContainer = ({
 
 }) => {
@@ -23,8 +22,9 @@ const FormContainer = ({
 
     const loadItems = async () => {
       console.log("async load");
-      const { data } = await axios.get("http://localhost:3750/list")
-      setWishlist(data);
+      const res= await getList()
+      console.log(res)
+      setWishlist(res);
     }
     loadItems()
   }, [])
@@ -46,10 +46,13 @@ const FormContainer = ({
   const addItem = async (wish) => {
     // var wishes = wishlist.concat([wish])
     // setWishlist(wishes)
-    const res = await axios.post("http://localhost:3750/list/addlist", wish)
-    console.log(res.data)
+    //local
+    // const res = await axios.post("http://localhost:3750/list/addlist", wish)
+    //aws
+    const res = await addList(wish)
 
   }
+
   const searchItem = async (txt) => {
     console.log(txt);
     console.log("async search");
@@ -58,7 +61,6 @@ const FormContainer = ({
         txt: txt
       }
     })
-    console.log(res.data);
     setWishlist(res.data);
   }
 
@@ -80,7 +82,6 @@ const FormContainer = ({
   }
 
   
-  console.log("donelist",donelist)
 
   const handleFilter = async () => {
     location.reload();
@@ -94,16 +95,8 @@ const FormContainer = ({
 
   }
 
-  const saveMyWishList = async (wishlist) => {
-    // const res =await axios.post("/api/wishlist",{
-    //  wishlist:wishlist
-    // })
-    const res = await axios.put("http://localhost:3750/list/updatelist", wishlist)
 
-    console.log(res.data)
 
-  }
-  // console.log(wishlist)
 
   return <Container className={styles.card} >
     <Row className="justify-content-md-center mb-5">
@@ -121,7 +114,7 @@ const FormContainer = ({
       <Col lg="10" className="justify-content-md-center">
 
         <Button style={{ margin: '20px' }} onClick={handleFilter}>Delete</Button>
-        <Button style={{ margin: '20px' }} onClick={saveMyWishList}>Save</Button>
+     
       </Col>
 
     </Row>
