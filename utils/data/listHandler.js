@@ -16,7 +16,7 @@ export const deleteList = async ( formData) => {
 export const getList = async ( ) => {
   
     const URL = process.env.BASE_URL + "/list"
-    console.log("URL",URL)
+    // console.log("URL",URL)
     try{
         const res = await axios.get(URL)
         return res.data
